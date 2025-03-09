@@ -3,7 +3,6 @@ package com.example.bratishka.bratishkaUserBackEnd.controllers;
 import com.example.bratishka.bratishkaUserBackEnd.models.User;
 import com.example.bratishka.bratishkaUserBackEnd.security.JwtTokenProvider;
 import com.example.bratishka.bratishkaUserBackEnd.services.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,16 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserServiceImpl userServiceImpl;
 
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserServiceImpl userServiceImpl) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.userServiceImpl = userServiceImpl;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user) {
         user = userServiceImpl.createUser(user);
+        //TODO Блок добавления в их бд
         return ResponseEntity.ok(user);
     }
 
